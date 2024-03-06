@@ -7,7 +7,7 @@ class EarthTransferService() {
     init {
         val factory = ConnectionFactory()
         factory.host = "localhost"
-        factory.port = 6
+        factory.port = 5672
         try {
             //test
         } catch (e: Exception) {

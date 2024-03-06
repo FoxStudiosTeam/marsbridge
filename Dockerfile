@@ -2,8 +2,8 @@ FROM gradle:8.4.0-jdk21-alpine AS build
 LABEL authors="Senko-san"
 LABEL authors="AgniaEndie"
 LABEL authors="GekkStr"
-
+LABEL autors="xxlegendzxx22"
 WORKDIR /marsbridge
 COPY . /marsbridge
-RUN gradle bootJar
-ENTRYPOINT ["java","-XX:+UseZGC", "-jar", "/marsbridge/build/libs/marsbridge-0.0.1-SNAPSHOT.jar"]
+RUN gradle jar
+ENTRYPOINT ["java","-XX:+UseZGC", "-jar", "/marsbridge/build/libs/marsbridge-1.0-SNAPSHOT.jar"]

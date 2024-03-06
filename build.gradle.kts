@@ -34,9 +34,18 @@ tasks.test {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "21"
 }
-
+tasks.withType<Jar> {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+        attributes["Main-Class"] = application.mainClass
+    }
+    configurations["compileClasspath"].forEach { file: File ->
+        from(zipTree(file.absoluteFile))
+    }
+    exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
+}
 application {
     mainClass.set("ru.foxstudios.marsbridge.MainKt")
 }
