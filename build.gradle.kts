@@ -13,6 +13,19 @@ repositories {
 }
 
 dependencies {
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-core
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+    // https://mvnrepository.com/artifact/com.rabbitmq/amqp-client
+    implementation("com.rabbitmq:amqp-client:5.20.0")
+    // https://mvnrepository.com/artifact/io.projectreactor.netty/reactor-netty
+    implementation("io.projectreactor.netty:reactor-netty:1.1.16")
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api
+    implementation("org.apache.logging.log4j:log4j-api:2.23.0")
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
+    implementation("org.apache.logging.log4j:log4j-core:2.23.0")
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j2-impl
+    testImplementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.23.0")
+
     testImplementation(kotlin("test"))
 }
 
@@ -25,5 +38,5 @@ tasks.withType<KotlinCompile> {
 }
 
 application {
-    mainClass.set("MainKt")
+    mainClass.set("ru.foxstudios.marsbridge.MainKt")
 }
