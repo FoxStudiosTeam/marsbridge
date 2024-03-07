@@ -25,9 +25,12 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-core:2.23.0")
     // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-io-core
     runtimeOnly("org.jetbrains.kotlinx:kotlinx-io-core:0.3.1")
-
-    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j2-impl
-    testImplementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.23.0")
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api
+    implementation("org.apache.logging.log4j:log4j-api:2.23.0")
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
+    implementation("org.apache.logging.log4j:log4j-core:2.23.0")
+    // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
+    testImplementation("ch.qos.logback:logback-classic:1.5.3")
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
     testImplementation("org.slf4j:slf4j-simple:2.0.12")
 
