@@ -4,12 +4,15 @@ import com.rabbitmq.client.Connection
 import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.DeliverCallback
 import kotlinx.coroutines.runBlocking
+import org.slf4j.LoggerFactory
+import reactor.core.publisher.Mono
 import java.lang.instrument.Instrumentation
 
 
-class EarthTransferService() {
+class EarthTransferService(var client: reactor.netty.Connection) {
     init {
         val factory = ConnectionFactory()
+        val logger = LoggerFactory.getLogger(this::class.java)
         factory.host = "mars-queue-service"
         factory.port = 5672
         try {
@@ -21,9 +24,14 @@ class EarthTransferService() {
                 val weight = runBlocking {
                     countMessageWeight(message)
                 }
+
                 println(" [x] Received '$message' weight: $weight")
+                client.outbound().sendString(Mono.just(message)).then().subscribe()
+                client.inbound().receive().asString().doOnNext{text ->
+                    logger.info(text)
+                }
             }
-            channel.basicConsume("mars-queue", true, deliverCallback, { consumerTag -> })
+            channel.basicConsume("mars-queue", false, deliverCallback, { consumerTag -> })
         } catch (e: Exception) {
 
         }

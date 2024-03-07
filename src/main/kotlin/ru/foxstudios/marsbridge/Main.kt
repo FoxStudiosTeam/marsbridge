@@ -9,8 +9,8 @@ import ru.foxstudios.marsbridge.service.EarthTransferService
 import java.time.Duration
 
 fun main(args: Array<String>) {
-    val client: Connection = UdpClient.create().port(25577).host("127.0.0.1").connectNow().bind()
-    val rmqService = EarthTransferService()
+    val client: Connection = UdpClient.create().port(25577).host("127.0.0.1").connectNow()
+    val rmqService = EarthTransferService(client)
     runBlocking {
         launch {
 
