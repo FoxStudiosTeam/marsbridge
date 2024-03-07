@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory
 import reactor.core.publisher.Mono
 
 
-class EarthTransferService(private var client: reactor.netty.Connection) {
-    init {
+class EarthTransferService() {
+    fun sendMessage(client:reactor.netty.Connection){
         val factory = ConnectionFactory()
         val logger = LoggerFactory.getLogger(this::class.java)
         factory.host = "mars-queue-service"
@@ -32,7 +32,6 @@ class EarthTransferService(private var client: reactor.netty.Connection) {
             println(e.message)
         }
     }
-
     private suspend fun countMessageWeight(message: String): Int {
         return message.toByteArray(Charsets.UTF_8).size
     }

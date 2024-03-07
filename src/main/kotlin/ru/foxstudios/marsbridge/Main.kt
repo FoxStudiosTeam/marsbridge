@@ -9,18 +9,15 @@ import ru.foxstudios.marsbridge.service.EarthTransferService
 
 fun main(args: Array<String>) {
     val client: Connection = UdpClient.create().port(25577).host("host.docker.internal").connectNow()
-    val rmqService = EarthTransferService(client)
+    val rmqService = EarthTransferService()
     runBlocking {
         launch {
             client.inbound().receive().asString().doOnTerminate {
-
-
+                println("disconnect!")
             }
-                .doOnNext { text -> println(text) }
+                .doOnNext { text -> println(text); rmqService.sendMessage(client) }
                 .doOnError { err -> println(err.message); client.disposeNow() }
                 .subscribe()
-
-
         }
         println("starting1")
     }
