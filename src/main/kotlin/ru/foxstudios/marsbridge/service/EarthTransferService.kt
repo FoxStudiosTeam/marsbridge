@@ -6,7 +6,6 @@ import com.rabbitmq.client.DeliverCallback
 import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Mono
-import java.lang.instrument.Instrumentation
 
 
 class EarthTransferService(var client: reactor.netty.Connection) {
@@ -30,7 +29,7 @@ class EarthTransferService(var client: reactor.netty.Connection) {
             }
             channel.basicConsume("mars-queue", false, deliverCallback, { consumerTag -> })
         } catch (e: Exception) {
-
+            println(e.message)
         }
     }
 
