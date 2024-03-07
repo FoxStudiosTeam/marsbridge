@@ -35,6 +35,9 @@ fun main(args: Array<String>) {
 
 fun doWork(client: Connection, message: String) {
     var localClient = client
+    if(client.isDisposed){
+        localClient = UdpClient.create().port(25577).host("host.docker.internal").wiretap(true).connectNow()
+    }
     val weight = runBlocking {
         countMessageWeight(message)
     }
