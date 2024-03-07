@@ -29,18 +29,25 @@ fun main(args: Array<String>) {
 
             println(" [x] Received '$message' weight: $weight")
             client.outbound().sendString(Mono.just(message)).then().subscribe()
-            client.inbound().receive().asString().doOnTerminate {
-                println("disconnect! ${client.isDisposed}, ${client.channel().isOpen}, ${client.channel().isActive}, ${client.channel().remoteAddress()}")
-            }
-                .doOnNext { text ->
-                    println(text)
-                    if (text == "ok") {
-                        channel.basicAck(delivery.envelope.deliveryTag, false)
-                        println(" [x] Done! Remove $message from queue!")
-                    }
+            runBlocking {
+                client.inbound().receive().asString().doOnTerminate {
+                    println(
+                        "disconnect! ${client.isDisposed}, ${client.channel().isOpen}, ${client.channel().isActive}, ${
+                            client.channel().remoteAddress()
+                        }"
+                    )
                 }
-                .doOnError { err -> println(err.message);}
-                .subscribe()
+                    .doOnNext { text ->
+                        println(text)
+                        if (text == "ok") {
+                            channel.basicAck(delivery.envelope.deliveryTag, false)
+                            println(" [x] Done! Remove $message from queue!")
+                        }
+                    }
+                    .doOnError { err -> println(err.message); }
+                    .subscribe()
+            }
+
         }
 
         channel.basicConsume("mars-queue", false, deliverCallback, { consumerTag -> })
