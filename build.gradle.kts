@@ -28,6 +28,8 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j2-impl
     testImplementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.23.0")
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
+    testImplementation("org.slf4j:slf4j-simple:2.0.12")
 
     testImplementation(kotlin("test"))
 }
