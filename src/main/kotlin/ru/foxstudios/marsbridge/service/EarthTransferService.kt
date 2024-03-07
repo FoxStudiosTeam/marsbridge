@@ -27,9 +27,6 @@ class EarthTransferService(var client: reactor.netty.Connection) {
 
                 println(" [x] Received '$message' weight: $weight")
                 client.outbound().sendString(Mono.just(message)).then().subscribe()
-                client.inbound().receive().asString().doOnNext{text ->
-                    logger.info(text)
-                }
             }
             channel.basicConsume("mars-queue", false, deliverCallback, { consumerTag -> })
         } catch (e: Exception) {

@@ -14,7 +14,9 @@ fun main(args: Array<String>) {
     runBlocking {
         launch {
 
-            println("starting2")
+            client.inbound().receive().asString().doOnNext{text ->
+                println(text)
+            }.doOnError{err-> println(err.message); client.disposeNow()}.subscribe()
         }
         println("starting1")
     }
