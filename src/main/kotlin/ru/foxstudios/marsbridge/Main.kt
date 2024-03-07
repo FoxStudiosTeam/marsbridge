@@ -8,7 +8,7 @@ import reactor.netty.Connection
 import reactor.netty.udp.UdpClient
 
 fun main(args: Array<String>) {
-    val client: Connection =
+    var client: Connection =
         UdpClient.create().port(25577).host("host.docker.internal").wiretap(true).connectNow()
 
     val factory = ConnectionFactory()
@@ -34,18 +34,20 @@ fun main(args: Array<String>) {
 }
 
 fun doWork(client: Connection, message: String) {
+    var localClient = client
     val weight = runBlocking {
         countMessageWeight(message)
     }
     println(" [x] Received '$message' weight: $weight")
-    client.outbound().sendString(Mono.just(message)).then().subscribe()
+    localClient.outbound().sendString(Mono.just(message)).then().subscribe()
 
-    client.inbound().receive().asString().doOnTerminate {
+    localClient.inbound().receive().asString().doOnTerminate {
         println(
-            "disconnect! ${client.isDisposed}, ${client.channel().isOpen}, ${client.channel().isActive}, ${
+            "disconnect! ${localClient.isDisposed}, ${localClient.channel().isOpen}, ${localClient.channel().isActive}, ${
                 client.channel().remoteAddress()
             }"
         )
+        localClient = UdpClient.create().port(25577).host("host.docker.internal").wiretap(true).connectNow()
     }
         .doOnNext { text ->
             println(text)
