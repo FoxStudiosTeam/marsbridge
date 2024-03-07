@@ -11,7 +11,6 @@ class EarthTransferService() {
     var client: Connection? = null
 
     init {
-        client = UdpClient.create().port(25577).host("host.docker.internal").wiretap(true).connectNow()
         val factory = ConnectionFactory()
         factory.host = "mars-queue-service"
         factory.port = 5672
@@ -27,15 +26,14 @@ class EarthTransferService() {
 
         }
         channel.basicConsume("mars-queue", true, deliverCallback, { consumerTag -> })
-        println("starting1")
         //client!!.onDispose().block()
     }
 
     fun doWork(message: String) {
-        if (client!!.isDisposed) {
-            client = UdpClient.create().port(25577).host("host.docker.internal").wiretap(true).connectNow()
-            println(" [d] isDisposed true ${client!!.isDisposed}")
-        }
+
+        client = UdpClient.create().port(25577).host("host.docker.internal").wiretap(true).connectNow()
+        println(" [d] isDisposed true ${client!!.isDisposed}")
+
         val weight = runBlocking {
             countMessageWeight(message)
         }
