@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory
 import reactor.core.publisher.Mono
 
 
-class EarthTransferService(var client: reactor.netty.Connection) {
+class EarthTransferService(private var client: reactor.netty.Connection) {
     init {
         val factory = ConnectionFactory()
         val logger = LoggerFactory.getLogger(this::class.java)
