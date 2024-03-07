@@ -51,7 +51,7 @@ class EarthTransferService() {
             )
         }
             .doOnNext { text ->
-                println(text)
+                logger.info(text)
                 if (text == "ok") {
                     logger.info(" [x] Done! Remove $message from queue!")
                 }
