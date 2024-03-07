@@ -28,7 +28,7 @@ class EarthTransferService() {
         }
         channel.basicConsume("mars-queue", true, deliverCallback, { consumerTag -> })
         println("starting1")
-        client!!.onDispose().block()
+        //client!!.onDispose().block()
     }
 
     fun doWork(message: String) {
