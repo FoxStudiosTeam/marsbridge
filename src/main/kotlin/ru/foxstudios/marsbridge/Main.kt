@@ -46,6 +46,7 @@ fun main(args: Array<String>) {
         channel.basicConsume("mars-queue", false, deliverCallback, { consumerTag -> })
     } catch (e: Exception) {
         println(e.message)
+        e.printStackTrace()
     }
 
 
