@@ -8,7 +8,7 @@ import reactor.netty.udp.UdpClient
 import ru.foxstudios.marsbridge.service.EarthTransferService
 
 fun main(args: Array<String>) {
-    val client: Connection = UdpClient.create().port(25577).host("host.docker.internal").doOnDisconnected {
+    val client: Connection = UdpClient.create().port(25577).host("host.docker.internal").wiretap(true).doOnDisconnected {
         it.rebind(reconnect())
     }.connectNow()
 
