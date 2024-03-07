@@ -37,6 +37,7 @@ fun doWork(client: Connection, message: String) {
     var localClient = client
     if(client.isDisposed){
         localClient = UdpClient.create().port(25577).host("host.docker.internal").wiretap(true).connectNow()
+        println(" [d] isDisposed true ${localClient.isDisposed}")
     }
     val weight = runBlocking {
         countMessageWeight(message)
@@ -50,12 +51,10 @@ fun doWork(client: Connection, message: String) {
                 client.channel().remoteAddress()
             }"
         )
-        localClient = UdpClient.create().port(25577).host("host.docker.internal").wiretap(true).connectNow()
     }
         .doOnNext { text ->
             println(text)
             if (text == "ok") {
-                //channel.basicAck(delivery.envelope.deliveryTag, false)
                 println(" [x] Done! Remove $message from queue!")
             }
         }
