@@ -30,7 +30,7 @@ fun main(args: Array<String>) {
             println(" [x] Received '$message' weight: $weight")
             client.outbound().sendString(Mono.just(message)).then().subscribe()
             client.inbound().receive().asString().doOnTerminate {
-                println("disconnect!")
+                println("disconnect! ${client.isDisposed}")
             }
                 .doOnNext { text ->
                     println(text)
