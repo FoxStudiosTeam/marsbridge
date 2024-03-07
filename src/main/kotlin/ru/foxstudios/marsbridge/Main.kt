@@ -8,10 +8,7 @@ import reactor.netty.udp.UdpClient
 import ru.foxstudios.marsbridge.service.EarthTransferService
 
 fun main(args: Array<String>) {
-    val client: Connection = UdpClient.create().port(25577).host("host.docker.internal").doOnResolve {
-        it.rebind(reconnect())
-    }
-        .connectNow()
+    val client: Connection = UdpClient.create().port(25577).host("host.docker.internal").connectNow()
     val rmqService = EarthTransferService(client)
     runBlocking {
         launch {
