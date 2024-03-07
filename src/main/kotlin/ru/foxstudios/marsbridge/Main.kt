@@ -39,7 +39,7 @@ fun main(args: Array<String>) {
                         println(" [x] Done! Remove $message from queue!")
                     }
                 }
-                .doOnError { err -> println(err.message); client.disposeNow() }
+                .doOnError { err -> println(err.message);}
                 .subscribe()
         }
 
