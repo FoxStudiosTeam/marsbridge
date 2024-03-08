@@ -56,7 +56,7 @@ class EarthTransferService() {
 
         val size = file.readBytes()
         var testString = ""
-        val weightLocal = 256
+        val weightLocal = 1024 * 8
         if (size.size > weightLocal) {
             println("here, current bufferedSize: ${size.size}")
             val list = ArrayList<ByteArray>()
