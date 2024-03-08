@@ -38,22 +38,22 @@ class EarthTransferService() {
         //client!!.onDispose().block()
     }
 
-    fun doWork(
-        message: String, channel: Channel, delivery: Delivery
-    ) {
+    fun doWork(message: String, channel: Channel, delivery: Delivery) {
 
         client = UdpClient.create().port(25577).host("host.docker.internal").wiretap(true).connectNow()
-
+        println(" [d] isDisposed true ${client!!.isDisposed}")
 
         val weight = runBlocking {
             countMessageWeight(message)
         }
         println(" [x] Received '$message' weight: $weight")
-        client!!.outbound().sendObject(Mono.just(message)).then().subscribe()
-        println("test")
+        client!!.outbound().sendString(Mono.just(message)).then().subscribe()
+
         client!!.inbound().receive().asString().doOnTerminate {
             println(
-                "disconnect! ${client!!.isDisposed}, ${client!!.channel().isOpen}, ${client!!.channel().isActive}, ${client!!.channel().remoteAddress()}"
+                "disconnect! ${client!!.isDisposed}, ${client!!.channel().isOpen}, ${client!!.channel().isActive}, ${
+                    client!!.channel().remoteAddress()
+                }"
             )
         }
             .doOnNext { text ->
