@@ -10,6 +10,7 @@ import reactor.core.publisher.Mono
 import reactor.netty.Connection
 import reactor.netty.udp.UdpClient
 import java.io.File
+import java.nio.charset.StandardCharsets
 import kotlin.math.min
 
 
@@ -53,19 +54,21 @@ class EarthTransferService() {
         //client!!.outbound().sendString(Mono.just(message)).then().subscribe()
 
         val size = file.readBytes()
+        var testString = ""
         if (size.size > 40972) {
             val list = ArrayList<ByteArray>()
             var i = 0
             while (i < size.size) {
                 list.add(size.slice(i..min(size.size, i + 40972)).toByteArray())
+
                 i += 40972
             }
 
             for (elem in list) {
+                testString += elem.toString(StandardCharsets.UTF_8)
                 client!!.outbound().sendByteArray(Mono.just(elem)).then().subscribe()
             }
-
-
+            println(testString)
 
         } else {
             client!!.outbound().sendByteArray(Mono.just(file.readBytes())).then().subscribe()
