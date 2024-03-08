@@ -58,10 +58,13 @@ class EarthTransferService() {
             i += 8
         }
         for(elem in list){
-            println(elem)
+            client!!.outbound().sendByteArray(Mono.just(message.toByteArray(StandardCharsets.UTF_8))).then().subscribe()
+            if(elem == list.last()){
+                client!!.outbound().sendString(Mono.just("*")).then().subscribe()
+            }
         }
         //.sendString(Mono.just(message))
-        client!!.outbound().sendByteArray(Mono.just(message.toByteArray(StandardCharsets.UTF_8))).then().subscribe()
+
 
         client!!.inbound().receive().asString().doOnTerminate {
             logger.info(
@@ -76,7 +79,9 @@ class EarthTransferService() {
                     logger.info(" [x] Done! Remove $message from queue!")
                     channel.basicAck(delivery.envelope.deliveryTag, false)
                 } else {
-                    channel.basicNack(delivery.envelope.deliveryTag, false, true)
+                    if (text != "*") {
+                        channel.basicNack(delivery.envelope.deliveryTag, false, true)
+                    }
                 }
             }
             .doOnError { err -> logger.info(err.message); }
