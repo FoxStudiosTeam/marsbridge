@@ -1,7 +1,9 @@
 package ru.foxstudios.marsbridge.service
 
+import com.rabbitmq.client.Channel
 import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.DeliverCallback
+import com.rabbitmq.client.Delivery
 import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import reactor.core.publisher.Mono
@@ -22,17 +24,18 @@ class EarthTransferService() {
         val deliverCallback: DeliverCallback = DeliverCallback { _, delivery ->
             val message = String(delivery.body, charset("UTF-8"))
             try {
-                doWork(message)
+                doWork(message, channel,delivery)
             } finally {
                 logger.info(" [x] Done - ok?!")
             }
 
         }
-        channel.basicConsume("mars-queue", true, deliverCallback, { consumerTag -> })
+        channel.basicConsume("mars-queue", false, deliverCallback, { consumerTag -> })
         //client!!.onDispose().block()
     }
 
-    fun doWork(message: String) {
+    fun doWork(message: String, channel: Channel, delivery:Delivery
+    ) {
 
         client = UdpClient.create().port(25577).host("host.docker.internal").wiretap(true).connectNow()
         logger.info(" [d] isDisposed true ${client!!.isDisposed}")
@@ -54,6 +57,7 @@ class EarthTransferService() {
                 logger.info(text)
                 if (text == "ok") {
                     logger.info(" [x] Done! Remove $message from queue!")
+                    channel.basicAck(delivery.envelope.deliveryTag, false);
                 }
             }
             .doOnError { err -> logger.info(err.message); }
