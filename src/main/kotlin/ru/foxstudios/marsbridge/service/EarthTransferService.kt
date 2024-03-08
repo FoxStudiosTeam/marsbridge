@@ -49,33 +49,6 @@ class EarthTransferService() {
             countMessageWeight(message)
         }
         println(" [x] Received '$message' weight: $weight")
-        try{
-            val file = File("temp/te.json")
-            FileUtils.touch(file)
-            FileUtils.writeByteArrayToFile(file, message.toByteArray())
-        }catch (e:Exception){
-            println(e)
-        }
-
-
-//        val list = ArrayList<String>()
-//        val length = message.length
-//
-//
-//        var i = 0
-//        while (i < length) {
-//            list.add(message.substring(i, Math.min(length, i + 8)))
-//            i += 8
-//        }
-//        for(elem in list){
-//            client!!.outbound().sendByteArray(Mono.just(message.toByteArray(StandardCharsets.UTF_8))).then().subscribe()
-//            if(elem == list.last()){
-//                client!!.outbound().sendString(Mono.just("*")).then().subscribe()
-//
-//            }
-//        }
-        //.sendString(Mono.just(message))
-        //sendFile(Path.of("temp/te.json"))
         client!!.outbound().sendObject(Mono.just(message)).then().subscribe()
 
         client!!.inbound().receive().asString().doOnTerminate {
@@ -88,13 +61,6 @@ class EarthTransferService() {
                 if (text == "ok") {
                     println(" [x] Done! Remove $message from queue!")
                     channel.basicAck(delivery.envelope.deliveryTag, false)
-                } else {
-                    if (text != "*") {
-                        println("file tranfer end")
-                        channel.basicNack(delivery.envelope.deliveryTag, false, true)
-                    }else{
-                        println(text)
-                    }
                 }
             }
             .doOnError { err -> println(err.message); }
