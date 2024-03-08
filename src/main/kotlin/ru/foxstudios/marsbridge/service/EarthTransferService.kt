@@ -39,7 +39,7 @@ class EarthTransferService() {
     ) {
 
         client = UdpClient.create().port(25577).host("host.docker.internal").wiretap(true).connectNow()
-        println(" [d] isDisposed true ${client!!.isDisposed}")
+
 
         val weight = runBlocking {
             countMessageWeight(message)
@@ -78,6 +78,8 @@ class EarthTransferService() {
                 } else {
                     if (text != "*") {
                         channel.basicNack(delivery.envelope.deliveryTag, false, true)
+                    }else{
+                        println("file tranfer end")
                     }
                 }
             }
