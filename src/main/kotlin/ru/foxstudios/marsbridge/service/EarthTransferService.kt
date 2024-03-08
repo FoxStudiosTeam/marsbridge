@@ -52,18 +52,19 @@ class EarthTransferService() {
         val file = File("tmp/file.json")
         FileUtils.touch(file)
         FileUtils.writeByteArrayToFile(file, message.toByteArray())
-        println(file.readText())
         //client!!.outbound().sendString(Mono.just(message)).then().subscribe()
 
         val size = file.readBytes()
         var testString = ""
-        if (size.size > 1024) {
+        val weightLocal = 256
+        if (size.size > weightLocal) {
+            println("here")
             val list = ArrayList<ByteArray>()
             var i = 0
             while (i < size.size) {
-                list.add(size.slice(i..min(size.size, i + 1024)).toByteArray())
+                list.add(size.slice(i..min(size.size, i + weightLocal)).toByteArray())
 
-                i += 1024
+                i += weightLocal
             }
 
             for (elem in list) {
@@ -71,7 +72,7 @@ class EarthTransferService() {
                 println("part sended! ")
                 client!!.outbound().sendByteArray(Mono.just(elem)).then().subscribe()
             }
-            println(testString)
+
 
         } else {
             client!!.outbound().sendByteArray(Mono.just(file.readBytes())).then().subscribe()
