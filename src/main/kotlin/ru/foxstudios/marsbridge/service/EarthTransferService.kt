@@ -24,7 +24,7 @@ class EarthTransferService() {
         val deliverCallback: DeliverCallback = DeliverCallback { _, delivery ->
             val message = String(delivery.body, charset("UTF-8"))
             try {
-                doWork(message, channel,delivery)
+                doWork(message, channel, delivery)
             } finally {
                 logger.info(" [x] Done - ok?!")
             }
@@ -34,7 +34,8 @@ class EarthTransferService() {
         //client!!.onDispose().block()
     }
 
-    fun doWork(message: String, channel: Channel, delivery:Delivery
+    fun doWork(
+        message: String, channel: Channel, delivery: Delivery
     ) {
 
         client = UdpClient.create().port(25577).host("host.docker.internal").wiretap(true).connectNow()
@@ -57,7 +58,9 @@ class EarthTransferService() {
                 logger.info(text)
                 if (text == "ok") {
                     logger.info(" [x] Done! Remove $message from queue!")
-                    channel.basicAck(delivery.envelope.deliveryTag, false);
+                    channel.basicAck(delivery.envelope.deliveryTag, false)
+                } else {
+                    channel.basicNack(delivery.envelope.deliveryTag, false,true)
                 }
             }
             .doOnError { err -> logger.info(err.message); }
