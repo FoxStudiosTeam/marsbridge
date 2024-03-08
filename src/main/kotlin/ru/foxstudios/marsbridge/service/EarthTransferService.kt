@@ -68,7 +68,7 @@ class EarthTransferService() {
                 j += 1
                 i += weightLocal
             }
-
+            println("exit")
             for (elem in list) {
                 testString += elem.toString(StandardCharsets.UTF_8)
                 println("part sended! ")
