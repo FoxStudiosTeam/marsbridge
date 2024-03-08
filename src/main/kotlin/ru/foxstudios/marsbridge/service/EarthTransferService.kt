@@ -4,6 +4,7 @@ import com.rabbitmq.client.Channel
 import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.DeliverCallback
 import com.rabbitmq.client.Delivery
+import io.netty.channel.ChannelOption
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.io.FileUtils
 import reactor.core.publisher.Mono
@@ -40,7 +41,8 @@ class EarthTransferService() {
 
     fun doWork(message: String, channel: Channel, delivery: Delivery) {
 
-        client = UdpClient.create().port(25577).host("host.docker.internal").wiretap(true).connectNow()
+        client = UdpClient.create().port(25577).host("host.docker.internal").wiretap(true).option(ChannelOption.SO_SNDBUF,
+            Int.MAX_VALUE ).connectNow()
         println(" [d] isDisposed true ${client!!.isDisposed}")
 
         val weight = runBlocking {
