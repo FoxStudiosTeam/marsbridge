@@ -49,9 +49,13 @@ class EarthTransferService() {
             countMessageWeight(message)
         }
         println(" [x] Received '$message' weight: $weight")
-        val file = File("temp/te.json")
-        FileUtils.touch(file)
-        FileUtils.writeByteArrayToFile(file, message.toByteArray())
+        try{
+            val file = File("temp/te.json")
+            FileUtils.touch(file)
+            FileUtils.writeByteArrayToFile(file, message.toByteArray())
+        }catch (e:Exception){
+            println(e)
+        }
 
 
 //        val list = ArrayList<String>()
