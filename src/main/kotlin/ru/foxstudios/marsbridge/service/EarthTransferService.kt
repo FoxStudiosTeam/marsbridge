@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory
 import reactor.core.publisher.Mono
 import reactor.netty.Connection
 import reactor.netty.udp.UdpClient
+import java.awt.SystemColor.text
+import java.nio.charset.StandardCharsets
+
 
 class EarthTransferService() {
     var client: Connection? = null
@@ -45,7 +48,20 @@ class EarthTransferService() {
             countMessageWeight(message)
         }
         logger.info(" [x] Received '$message' weight: $weight")
-        client!!.outbound().sendString(Mono.just(message)).then().subscribe()
+        val list = ArrayList<String>()
+        val length = message.length
+
+
+        var i = 0
+        while (i < length) {
+            list.add(message.substring(i, Math.min(length, i + 8)))
+            i += 8
+        }
+        for(elem in list){
+            println(elem)
+        }
+        //.sendString(Mono.just(message))
+        client!!.outbound().sendByteArray(Mono.just(message.toByteArray(StandardCharsets.UTF_8))).then().subscribe()
 
         client!!.inbound().receive().asString().doOnTerminate {
             logger.info(
@@ -60,7 +76,7 @@ class EarthTransferService() {
                     logger.info(" [x] Done! Remove $message from queue!")
                     channel.basicAck(delivery.envelope.deliveryTag, false)
                 } else {
-                    channel.basicNack(delivery.envelope.deliveryTag, false,true)
+                    channel.basicNack(delivery.envelope.deliveryTag, false, true)
                 }
             }
             .doOnError { err -> logger.info(err.message); }
