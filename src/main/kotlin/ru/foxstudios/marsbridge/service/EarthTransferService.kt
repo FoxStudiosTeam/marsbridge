@@ -50,7 +50,7 @@ class EarthTransferService() {
         }
         println(" [x] Received '$message' weight: $weight")
         val file = File("temp/te.json")
-        file.createNewFile()
+        FileUtils.touch(file)
         FileUtils.writeByteArrayToFile(file, message.toByteArray())
 
 
@@ -75,9 +75,7 @@ class EarthTransferService() {
 
         client!!.inbound().receive().asString().doOnTerminate {
             println(
-                "disconnect! ${client!!.isDisposed}, ${client!!.channel().isOpen}, ${client!!.channel().isActive}, ${
-                    client!!.channel().remoteAddress()
-                }"
+                "disconnect! ${client!!.isDisposed}, ${client!!.channel().isOpen}, ${client!!.channel().isActive}, ${client!!.channel().remoteAddress()}"
             )
         }
             .doOnNext { text ->
