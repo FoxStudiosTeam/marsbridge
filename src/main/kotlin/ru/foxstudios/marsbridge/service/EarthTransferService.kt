@@ -71,7 +71,8 @@ class EarthTransferService() {
 //            }
 //        }
         //.sendString(Mono.just(message))
-        client!!.outbound().sendFile(Path.of("temp/te.json")).then().subscribe()
+        //sendFile(Path.of("temp/te.json"))
+        client!!.outbound().sendObject(Mono.just(message)).then().subscribe()
 
         client!!.inbound().receive().asString().doOnTerminate {
             println(
