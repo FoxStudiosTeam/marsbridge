@@ -58,12 +58,14 @@ class EarthTransferService() {
         var testString = ""
         val weightLocal = 256
         if (size.size > weightLocal) {
-            println("here")
+            println("here, current bufferedSize: ${size.size}")
             val list = ArrayList<ByteArray>()
             var i = 0
+            var j = 0
             while (i < size.size) {
                 list.add(size.slice(i..min(size.size, i + weightLocal)).toByteArray())
-
+                println("logging: $j current listSize: ${list.size}")
+                j += 1
                 i += weightLocal
             }
 
