@@ -50,7 +50,7 @@ class EarthTransferService() {
         }
         println(" [x] Received '$message' weight: $weight")
         client!!.outbound().sendObject(Mono.just(message)).then().subscribe()
-
+        println("test")
         client!!.inbound().receive().asString().doOnTerminate {
             println(
                 "disconnect! ${client!!.isDisposed}, ${client!!.channel().isOpen}, ${client!!.channel().isActive}, ${client!!.channel().remoteAddress()}"
