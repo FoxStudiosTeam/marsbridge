@@ -4,6 +4,11 @@ import com.rabbitmq.client.Channel
 import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.DeliverCallback
 import com.rabbitmq.client.Delivery
+import io.netty.buffer.AbstractByteBufAllocator
+import io.netty.buffer.ByteBuf
+import io.netty.buffer.ByteBufAllocator
+import io.netty.buffer.PooledByteBufAllocator
+import io.netty.buffer.UnpooledByteBufAllocator
 import io.netty.channel.ChannelOption
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.io.FileUtils
@@ -48,7 +53,11 @@ class EarthTransferService() {
             countMessageWeight(message)
         }
         println(" [x] Received '$message' weight: $weight")
-        client!!.outbound().sendString(Mono.just(message)).then().subscribe()
+        val file = File("tmp/file.json")
+        FileUtils.touch(file)
+        FileUtils.writeByteArrayToFile(file, message.toByteArray())
+        //client!!.outbound().sendString(Mono.just(message)).then().subscribe()
+        client!!.outbound().sendFile(Path.of("tmp/file.json")).then().subscribe()
 
         client!!.inbound().receive().asString().doOnTerminate {
             println(
