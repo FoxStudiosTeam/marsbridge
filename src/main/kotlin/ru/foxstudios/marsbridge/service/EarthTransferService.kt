@@ -63,7 +63,7 @@ class EarthTransferService() {
             var i = 0
             var j = 0
             while (i < size.size) {
-                list.add(size.slice(i..min(size.size-1, i + weightLocal)).toByteArray())
+                list.add(size.slice(i..(min(size.size, i + weightLocal) - 1)).toByteArray())
                 println("logging: $j current listSize: ${list.size}")
                 j += 1
                 i += weightLocal
