@@ -41,7 +41,7 @@ class EarthTransferService() {
 
     fun doWork(message: String, channel: Channel, delivery: Delivery) {
 
-        client = UdpClient.create().port(25577).host("host.docker.internal").wiretap(true).option(ChannelOption.SO_RCVBUF, 30).connectNow()
+        client = UdpClient.create().port(25577).host("host.docker.internal").wiretap(true).option(ChannelOption.SO_SNDBUF, 30).connectNow()
         println(" [d] isDisposed true ${client!!.isDisposed}")
 
         val weight = runBlocking {
