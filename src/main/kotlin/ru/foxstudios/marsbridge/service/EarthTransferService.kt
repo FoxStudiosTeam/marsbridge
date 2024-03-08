@@ -58,7 +58,7 @@ class EarthTransferService() {
         FileUtils.writeByteArrayToFile(file, message.toByteArray())
         println(file.readText())
         //client!!.outbound().sendString(Mono.just(message)).then().subscribe()
-        client!!.outbound().sendFile(Path.of("tmp/file.json")).then().subscribe()
+        client!!.outbound().sendByteArray(Mono.just(file.readBytes())).then().subscribe()
 
         client!!.inbound().receive().asString().doOnTerminate {
             println(
