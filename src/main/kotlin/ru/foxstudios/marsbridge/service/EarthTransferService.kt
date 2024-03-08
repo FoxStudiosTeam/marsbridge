@@ -53,7 +53,7 @@ class EarthTransferService() {
         //client!!.outbound().sendString(Mono.just(message)).then().subscribe()
 
         val size = file.readBytes()
-        if (size.size < 40972) {
+        if (size.size > 40972) {
             val list = ArrayList<ByteArray>()
             var i = 0
             while (i < size.size) {
