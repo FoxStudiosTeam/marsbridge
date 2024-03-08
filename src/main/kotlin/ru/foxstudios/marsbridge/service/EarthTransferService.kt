@@ -57,17 +57,18 @@ class EarthTransferService() {
 
         val size = file.readBytes()
         var testString = ""
-        if (size.size > 40972) {
+        if (size.size > 1024) {
             val list = ArrayList<ByteArray>()
             var i = 0
             while (i < size.size) {
-                list.add(size.slice(i..min(size.size, i + 40972)).toByteArray())
+                list.add(size.slice(i..min(size.size, i + 1024)).toByteArray())
 
-                i += 40972
+                i += 1024
             }
 
             for (elem in list) {
                 testString += elem.toString(StandardCharsets.UTF_8)
+                println("part sended! ")
                 client!!.outbound().sendByteArray(Mono.just(elem)).then().subscribe()
             }
             println(testString)
