@@ -33,6 +33,7 @@ class EarthTransferService() {
 
         }
         channel.basicConsume("mars-queue", false, deliverCallback, { consumerTag -> })
+        channel.addShutdownListener{text-> error(text) }
         //client!!.onDispose().block()
     }
 
