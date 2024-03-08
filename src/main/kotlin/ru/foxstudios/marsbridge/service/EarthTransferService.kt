@@ -77,9 +77,8 @@ class EarthTransferService() {
                     channel.basicAck(delivery.envelope.deliveryTag, false)
                 } else {
                     if (text != "*") {
-                        channel.basicNack(delivery.envelope.deliveryTag, false, true)
-                    }else{
                         println("file tranfer end")
+                        channel.basicNack(delivery.envelope.deliveryTag, false, true)
                     }
                 }
             }
