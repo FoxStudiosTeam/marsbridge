@@ -4,21 +4,13 @@ import com.rabbitmq.client.Channel
 import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.DeliverCallback
 import com.rabbitmq.client.Delivery
-import io.netty.buffer.AbstractByteBufAllocator
-import io.netty.buffer.ByteBuf
-import io.netty.buffer.ByteBufAllocator
-import io.netty.buffer.PooledByteBufAllocator
-import io.netty.buffer.UnpooledByteBufAllocator
-import io.netty.channel.ChannelOption
 import kotlinx.coroutines.runBlocking
 import org.apache.commons.io.FileUtils
 import reactor.core.publisher.Mono
 import reactor.netty.Connection
 import reactor.netty.udp.UdpClient
 import java.io.File
-import java.io.FileInputStream
-import java.nio.charset.StandardCharsets
-import java.nio.file.Path
+import kotlin.math.min
 
 
 class EarthTransferService() {
@@ -58,7 +50,27 @@ class EarthTransferService() {
         FileUtils.writeByteArrayToFile(file, message.toByteArray())
         println(file.readText())
         //client!!.outbound().sendString(Mono.just(message)).then().subscribe()
-        client!!.outbound().sendByteArray(Mono.just(file.readBytes())).then().subscribe()
+
+        val size = file.readBytes()
+        if (size.size < 40972) {
+            val list = ArrayList<ByteArray>()
+            var i = 0
+            while (i < size.size) {
+                list.add(size.slice(i..min(size.size, i + 40972)).toByteArray())
+                i += 40972
+            }
+
+            for (elem in list) {
+                client!!.outbound().sendByteArray(Mono.just(elem)).then().subscribe()
+            }
+
+
+
+        } else {
+            client!!.outbound().sendByteArray(Mono.just(file.readBytes())).then().subscribe()
+        }
+
+
 
         client!!.inbound().receive().asString().doOnTerminate {
             println(
@@ -68,10 +80,11 @@ class EarthTransferService() {
             )
         }
             .doOnNext { text ->
-                println(text)
                 if (text == "ok") {
                     println(" [x] Done! Remove $message from queue!")
                     channel.basicAck(delivery.envelope.deliveryTag, false)
+                }else{
+                    println(" [*] Reveived: $text")
                 }
             }
             .doOnError { err -> println(err.message); }
