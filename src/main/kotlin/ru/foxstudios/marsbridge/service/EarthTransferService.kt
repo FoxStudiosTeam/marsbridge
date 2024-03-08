@@ -56,7 +56,7 @@ class EarthTransferService() {
 
         val size = file.readBytes()
         var testString = ""
-        val weightLocal = 1024 * 8
+        val weightLocal = 256
         if (size.size > weightLocal) {
             println("here, current bufferedSize: ${size.size}")
             val list = ArrayList<ByteArray>()
@@ -71,7 +71,7 @@ class EarthTransferService() {
             println("exit")
             for (elem in list) {
                 testString += elem.toString(StandardCharsets.UTF_8)
-                println("part sended! ")
+                println("part sended!, part: ${elem.toString(StandardCharsets.UTF_8)}")
                 client!!.outbound().sendByteArray(Mono.just(elem)).then().subscribe()
             }
 
