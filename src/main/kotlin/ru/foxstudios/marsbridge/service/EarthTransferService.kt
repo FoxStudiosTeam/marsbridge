@@ -56,6 +56,7 @@ class EarthTransferService() {
         val file = File("tmp/file.json")
         FileUtils.touch(file)
         FileUtils.writeByteArrayToFile(file, message.toByteArray())
+        println(file.readText())
         //client!!.outbound().sendString(Mono.just(message)).then().subscribe()
         client!!.outbound().sendFile(Path.of("tmp/file.json")).then().subscribe()
 
