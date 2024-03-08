@@ -5,10 +5,14 @@ import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.DeliverCallback
 import com.rabbitmq.client.Delivery
 import kotlinx.coroutines.runBlocking
+import org.apache.commons.io.FileUtils
 import reactor.core.publisher.Mono
 import reactor.netty.Connection
 import reactor.netty.udp.UdpClient
+import java.io.File
+import java.io.FileInputStream
 import java.nio.charset.StandardCharsets
+import java.nio.file.Path
 
 
 class EarthTransferService() {
@@ -45,23 +49,29 @@ class EarthTransferService() {
             countMessageWeight(message)
         }
         println(" [x] Received '$message' weight: $weight")
-        val list = ArrayList<String>()
-        val length = message.length
+        val file = File("temp/te.json")
+        file.createNewFile()
+        FileUtils.writeByteArrayToFile(file, message.toByteArray())
 
 
-        var i = 0
-        while (i < length) {
-            list.add(message.substring(i, Math.min(length, i + 8)))
-            i += 8
-        }
-        for(elem in list){
-            client!!.outbound().sendByteArray(Mono.just(message.toByteArray(StandardCharsets.UTF_8))).then().subscribe()
-            if(elem == list.last()){
-                client!!.outbound().sendString(Mono.just("*")).then().subscribe()
-            }
-        }
+//        val list = ArrayList<String>()
+//        val length = message.length
+//
+//
+//        var i = 0
+//        while (i < length) {
+//            list.add(message.substring(i, Math.min(length, i + 8)))
+//            i += 8
+//        }
+//        for(elem in list){
+//            client!!.outbound().sendByteArray(Mono.just(message.toByteArray(StandardCharsets.UTF_8))).then().subscribe()
+//            if(elem == list.last()){
+//                client!!.outbound().sendString(Mono.just("*")).then().subscribe()
+//
+//            }
+//        }
         //.sendString(Mono.just(message))
-
+        client!!.outbound().sendFile(Path.of("temp/te.json")).then().subscribe()
 
         client!!.inbound().receive().asString().doOnTerminate {
             println(
