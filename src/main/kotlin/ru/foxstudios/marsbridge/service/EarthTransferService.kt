@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets
 import kotlin.math.min
 
 
-class EarthTransferService() {
+class EarthTransferService {
     var client: Connection? = null
 
     init {
@@ -40,8 +40,8 @@ class EarthTransferService() {
     }
 
     fun doWork(message: String, channel: Channel, delivery: Delivery) {
-
-        client = UdpClient.create().port(30015).host("host.docker.internal").wiretap(true).option(ChannelOption.SO_SNDBUF,
+        //"host.docker.internal"
+        client = UdpClient.create().port(30015).host(System.getenv("EARTH_IP")).wiretap(true).option(ChannelOption.SO_SNDBUF,
             8192).connectNow()
         println(" [d] isDisposed true ${client!!.isDisposed}")
 
