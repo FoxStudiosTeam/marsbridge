@@ -31,6 +31,8 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-api:2.23.0")
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
     implementation("org.apache.logging.log4j:log4j-core:2.23.0")
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.16.2")
     // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
     testImplementation("ch.qos.logback:logback-classic:1.5.3")
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
