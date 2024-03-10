@@ -145,6 +145,7 @@ class EarthTransferService {
     }
 
     fun validateSchedule(scheduleModel: ScheduleModel,modelWeight:Int): Boolean {
+
         val startTime = LocalDateTime.now()
         val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
         val scheduleStartTime = LocalDateTime.parse(scheduleModel.fromD,formatter)
@@ -152,6 +153,10 @@ class EarthTransferService {
 
         val time = modelWeight.toDouble()/scheduleModel.speed.toDouble()
         val timeRelease = startTime.plusSeconds(time.toLong())
+
+        println(time)
+        println(timeRelease)
+        println(scheduleTimeEnd)
         return scheduleTimeEnd > timeRelease
     }
 }
