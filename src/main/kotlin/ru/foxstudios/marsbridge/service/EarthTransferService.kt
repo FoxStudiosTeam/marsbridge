@@ -51,12 +51,10 @@ class EarthTransferService {
             countMessageWeight(message)
         }
         println(" [x] Received '$message' weight: $weight")
-        val file = File("tmp/file.json")
-        FileUtils.touch(file)
-        FileUtils.writeByteArrayToFile(file, message.toByteArray())
+
         //client!!.outbound().sendString(Mono.just(message)).then().subscribe()
 
-        val size = file.readBytes()
+        val size = message.toByteArray()
         var testString = ""
         val weightLocal = 256
         if (size.size > weightLocal) {
@@ -79,7 +77,7 @@ class EarthTransferService {
 
 
         } else {
-            client!!.outbound().sendByteArray(Mono.just(file.readBytes())).then().subscribe()
+            client!!.outbound().sendByteArray(Mono.just(message.toByteArray())).then().subscribe()
         }
 
 
