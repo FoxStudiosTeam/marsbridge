@@ -43,7 +43,7 @@ class EarthTransferService {
         //"host.docker.internal"
         println("test-earth-ip ${System.getenv("EARTH_IP")}")
         //30015
-        client = UdpClient.create().port(28961).host(System.getenv("EARTH_IP")).wiretap(true).option(ChannelOption.SO_SNDBUF,
+        client = UdpClient.create().port(System.getenv("PORT").toInt()).host(System.getenv("EARTH_IP")).wiretap(true).option(ChannelOption.SO_SNDBUF,
             8192).connectNow()
         println(" [d] isDisposed true ${client!!.isDisposed}")
 
