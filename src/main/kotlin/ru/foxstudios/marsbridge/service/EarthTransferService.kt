@@ -123,7 +123,7 @@ class EarthTransferService {
     }
 
     fun getSchedule(): String {
-        val url = URL("http://example.com")
+        val url = URL("http://localhost:30007/data/getschedule")
         val con = url.openConnection() as HttpURLConnection
         con.requestMethod = "GET"
         con.setRequestProperty("Content-type", "application/json")
