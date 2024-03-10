@@ -44,7 +44,7 @@ class EarthTransferService {
         println("test-earth-ip ${System.getenv("EARTH_IP")} port:${System.getenv("PORT")}")
         //30015
         //.port(System.getenv("PORT").toInt())
-        client = UdpClient.create().host(System.getenv("EARTH_IP")).wiretap(true).option(ChannelOption.SO_SNDBUF,
+        client = UdpClient.create().host(System.getenv("EARTH_IP")).port(System.getenv("PORT").toInt()).wiretap(true).option(ChannelOption.SO_SNDBUF,
             8192).connectNow()
         println(" [d] isDisposed true ${client!!.isDisposed}")
 
